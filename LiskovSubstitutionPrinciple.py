@@ -1,51 +1,23 @@
-"""
-In the good example, Square is not a subclass of Rectangle. This adheres to LSP because now any code that 
-works with a Shape will work correctly with both Rectangle and Square without unexpected behavior.
-"""
+class Bird:
+    def fly(self):
+        return "Flying"
 
-# Bad example (violates LSP)
-class Rectangle:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+# Subclass that adheres to LSP
+class Sparrow(Bird):
+    def fly(self):
+        return "Sparrow is flying"
 
-    def set_width(self, width):
-        self.width = width
+class Penguin(Bird):
+    def fly(self):
+        raise NotImplementedError("Penguins can't fly")
 
-    def set_height(self, height):
-        self.height = height
+def let_bird_fly(bird: Bird):
+    print(bird.fly())
 
-    def area(self):
-        return self.width * self.height
+# This works for Sparrow
+sparrow = Sparrow()
+let_bird_fly(sparrow)  # Output: Sparrow is flying
 
-class Square(Rectangle):
-    def set_width(self, width):
-        self.width = width
-        self.height = width
-
-    def set_height(self, height):
-        self.width = height
-        self.height = height
-
-# Good example (follows LSP)
-from abc import ABC, abstractmethod
-
-class Shape(ABC):
-    @abstractmethod
-    def area(self):
-        pass
-
-class Rectangle(Shape):
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-    def area(self):
-        return self.width * self.height
-
-class Square(Shape):
-    def __init__(self, side):
-        self.side = side
-
-    def area(self):
-        return self.side ** 2
+# But violates LSP for Penguin, since Penguin cannot fly
+penguin = Penguin()
+let_bird_fly(penguin)  # This will raise NotImplementedError
